@@ -1,6 +1,7 @@
 from contextlib import closing
 from typing import override
 
+# creating the different htmlnodes
 
 class HTMLNode():
     def __init__(self, tag: str = None, value: str = None, children: list[HTMLNode] = None, props: dict = None):
