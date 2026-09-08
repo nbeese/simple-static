@@ -1,7 +1,12 @@
-from textnode import TextNode, TextType
+from copystatic import recursive_copy
+import os
+import shutil
+
 
 def main():
-    node = TextNode("this is dummy text",TextType.LINK,"https://boot.dev")
-    print(node)
+    if os.path.exists("./public"):
+        shutil.rmtree("./public")
+    recursive_copy("./static", "./public")
+
 
 main()
