@@ -1,15 +1,17 @@
 from platform import node
 from pydoc import html
 from enum import Enum
+
+from numpy._core.defchararray import title
 from htmlnode import HTMLNode,LeafNode,ParentNode
 from textnode import TextNode,TextType
 from block import BlockType
 from converter import text_node_to_html_node,text_to_textnodes, markdown_to_blocks, block_to_block_type, markdown_to_html_node
 from nodesplitter import split_nodes_delimiter,split_nodes_image,split_nodes_link
-from extract import extract_markdown_images,extract_markdown_links
+from extract import extract_markdown_images,extract_markdown_links, extract_title
 import unittest
 
-#Unittests
+# Unittests galore
 
 
 class OtherType(Enum):
@@ -669,6 +671,46 @@ She says crap
                 html,
                 "<div><h3>He says</h3><p>She says crap</p></div>",
                 )
+
+    def test_extract_title(self):
+        title = "# This is the title of my page"
+        extracted = extract_title(title)
+        self.assertEqual(
+           extracted,
+           "This is the title of my page"
+            )
+
+    def test_extract_title_trailing(self):
+        title = "# This is the title of my page  "
+        extracted = extract_title(title)
+        self.assertEqual(
+           extracted,
+           "This is the title of my page"
+            )
+
+    def test_extract_title_leading_trailing(self):
+        title = "#   This is the title of my page  "
+        extracted = extract_title(title)
+        self.assertEqual(
+           extracted,
+           "This is the title of my page"
+            )
+
+    def test_extract_title_leading(self):
+        title = "#   This is the title of my page"
+        extracted = extract_title(title)
+        self.assertEqual(
+           extracted,
+           "This is the title of my page"
+            )
+
+    def test_extract_title_hashtag(self):
+        title = "# This is the # title of my page"
+        extracted = extract_title(title)
+        self.assertEqual(
+           extracted,
+           "This is the # title of my page"
+            )
 
 if __name__ == "__main__":
     unittest.main()
