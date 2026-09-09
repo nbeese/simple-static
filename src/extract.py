@@ -1,5 +1,5 @@
 import re
-
+# Extract functions for links, images and title of the markdown page
 # catch all bracket regex \((.*?)\) is discouraged for links:
 # no separation, possible conflicts with brackets set for other reasons
 
@@ -15,3 +15,14 @@ def extract_markdown_links(text:str)-> tuple:
     #complete link regex (?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\) - negative lookbehind to avoid conflicts with image alt text
     matches = re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)",text)
     return matches
+
+def extract_title(markdown:str):
+    # Reminder: slicing is safer than lstrip in this case since we know exactly which header we are looking for
+    lines = markdown.split("\n")
+    for line in lines:
+        if line.startswith("# ") == True:
+            title = line[2:]
+            stripped_title = title.strip()
+            return stripped_title
+        else:
+            raise Exception("no h1 header found")
