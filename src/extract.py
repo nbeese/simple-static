@@ -24,5 +24,5 @@ def extract_title(markdown:str):
             title = line[2:]
             stripped_title = title.strip()
             return stripped_title
-        else:
-            raise Exception("no h1 header found")
+
+    raise Exception("no h1 header found")
