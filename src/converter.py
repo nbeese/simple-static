@@ -1,9 +1,10 @@
-from numpy import append
-
 from nodesplitter import split_nodes_delimiter,split_nodes_image,split_nodes_link
 from textnode import TextNode,TextType
-from htmlnode import HTMLNode, LeafNode, ParentNode
+from htmlnode import LeafNode, ParentNode
 from block import BlockType
+
+# Converter functions needed to convert texts and blocks
+# Ultimately converts the contents of a markdown file to html, the whole purposes of this course
 
 def text_node_to_html_node(text_node: TextNode) -> LeafNode:
     if text_node.text_type == TextType.TEXT:
@@ -22,7 +23,7 @@ def text_node_to_html_node(text_node: TextNode) -> LeafNode:
         raise AttributeError()
 
 def text_to_textnodes(text):
-    # convert text into nodes, one function after the other
+    # convert text into nodes, one splitting function and delimiter after the other
     # note: final_nodes are after splitting for links
     nodes = [TextNode(text=text,text_type=TextType.TEXT)]
     bold_nodes = split_nodes_delimiter(nodes,delimiter="**", text_type=TextType.BOLD)
@@ -43,7 +44,7 @@ def markdown_to_blocks(markdown):
 
     return clean_blocks
 
-    ## less of a converter function, more a type determinator
+# less of a converter function, more a type determinator
 def block_to_block_type(block):
     lines = block.split("\n")
     stripped = block.lstrip("#")
@@ -71,6 +72,7 @@ def text_to_children(text):
     return children
 
 def heading_level_detector(block):
+    # helper function for HEADING, to make sure it is the right heading level
     stripped_block = block.lstrip("#")
     heading_level = len(block) - len(stripped_block)
 
@@ -80,6 +82,9 @@ def heading_level_detector(block):
         return heading_level
 
 def list_wrapper(block,block_type):
+    # helper function for UNORDERED and ORDERED
+    # wraps the contents into the needed <li> </li> pairings
+    # determines stripping mode via given block_type argument
     lines = block.split("\n")
     wrapped_list = list()
 
@@ -109,7 +114,7 @@ def markdown_to_html_node(markdown):
             children.append(child)
 
         elif block_type == BlockType.HEADING:
-            #use helper function to determine heading level
+            # use helper function to determine heading level
             level = heading_level_detector(block)
             # level+1 makes sure that the required leading whitespace after the # is removed as well.
             child = ParentNode(tag=f"h{level}", children=text_to_children(block[level+1:]))
@@ -125,7 +130,7 @@ def markdown_to_html_node(markdown):
             children.append(outer_child)
 
         elif block_type == BlockType.UNORDERED or block_type == BlockType.ORDERED:
-            #determine if unordered or ordered
+            # determine if unordered or ordered
             # list item surrounder function might be a good idea
             if block_type==BlockType.UNORDERED:
                 child = ParentNode(tag="ul", children=(list_wrapper(block, block_type)))
