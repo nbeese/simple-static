@@ -712,5 +712,13 @@ She says crap
            "This is the # title of my page"
             )
 
+    def test_extract_title_newline(self):
+        title = "# This is the\n# title of my page"
+        extracted = extract_title(title)
+        self.assertEqual(
+            extracted,
+            "This is the"
+              )
+
 if __name__ == "__main__":
     unittest.main()
