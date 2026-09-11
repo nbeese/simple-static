@@ -2,7 +2,8 @@
 
 ![JRR Tolkien sitting](/images/tolkien.png)
 
-Here's the deal, **I like Tolkien**.
+Here's the deal, **I like Tolkien**. Not necessarily as much as this site depicts.
+But that's because most of the text here is from the guided project on static site generation on [boot.dev](https://boot.dev).
 
 > "I am in fact a Hobbit in all but size."
 >
